@@ -2,155 +2,136 @@
 
 [![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://www.python.org/)
 [![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange.svg)](https://jupyter.org/)
-[![Scikit--learn](https://img.shields.io/badge/scikit--learn-ML-F7931E.svg)](https://scikit-learn.org/)
+[![Scikit--learn](https://img.shields.io/badge/scikit--learn-Machine%20Learning-F7931E.svg)](https://scikit-learn.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-Deep%20Learning-FF6F00.svg)](https://www.tensorflow.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![CICIDS2017](https://img.shields.io/badge/Dataset-CICIDS2017-red.svg)](https://www.unb.ca/cic/datasets/ids-2017.html)
 
 ## Overview
 
-This repository provides the complete and reproducible implementation of a **trustworthy multiclass Network Intrusion Detection System (NIDS)** developed using the **CICIDS2017 benchmark dataset**.
+This repository provides the complete research implementation for **Trustworthy Multiclass Network Intrusion Detection** using the **CICIDS2017** benchmark dataset.
 
-The project investigates machine-learning and deep-learning approaches for multiclass network intrusion detection while incorporating **model explainability** and **predictive uncertainty estimation**. In addition to conventional classification models, the repository includes a Transformer-based architecture, counterfactual explanations using **DiCE**, and uncertainty estimation using **Monte Carlo Dropout**.
+The project develops and evaluates multiple machine-learning and deep-learning models for multiclass network intrusion detection and extends conventional classification with two trustworthy-AI components:
 
-The complete workflow covers:
+* **Counterfactual explainability using DiCE**
+* **Predictive uncertainty estimation using Monte Carlo Dropout**
 
-* Raw network-traffic dataset loading
-* Data cleaning and preprocessing
-* Feature-matrix construction
-* Correlation-based feature selection
-* Random Forest-based feature selection
-* Label encoding
-* Train/test splitting
-* Feature standardization
-* Classical machine-learning models
-* Multilayer Perceptron (MLP)
-* Transformer-based intrusion detection
-* Counterfactual explainability using DiCE
-* Monte Carlo Dropout uncertainty estimation
-* Reproducible experimental workflow
+The repository contains the complete notebook-based workflow, including dataset loading, data cleaning, feature-matrix preparation, feature selection, label encoding, train/test preparation, standardization, model training, explainability, and uncertainty analysis.
 
 ---
 
-## Research Objective
+## Research Objectives
 
-Traditional intrusion detection systems often focus primarily on predictive performance. However, high predictive accuracy alone does not necessarily provide sufficient information about **why a model makes a particular security decision or how confident the model is in that decision**.
+The primary objective is to investigate reliable and interpretable machine-learning approaches for multiclass network intrusion detection.
 
-This project therefore explores a more trustworthy intrusion-detection workflow by combining:
+The project focuses on:
 
-1. **Multiclass intrusion classification**
-2. **Feature-selection techniques**
-3. **Multiple machine-learning and deep-learning models**
-4. **Counterfactual explanations**
-5. **Predictive uncertainty estimation**
-
-The objective is to make machine-learning-based intrusion detection more **interpretable, transparent, and reliable** for security analysis.
-
----
-
-## Dataset
-
-### CICIDS2017
-
-The experiments in this repository use the **CICIDS2017** network intrusion detection benchmark.
-
-CICIDS2017 contains benign network traffic together with multiple realistic attack scenarios and network-flow features suitable for supervised intrusion-detection research.
-
-The dataset is **not included in this repository**.
-
-Users should obtain the dataset from its official source and place the required CSV files in their local working environment before executing the preprocessing notebooks.
-
-> **Important:** Dataset files are not redistributed through this repository.
+1. Multiclass network intrusion classification
+2. Reducing redundant network-flow features
+3. Comparing classical ML and deep-learning models
+4. Investigating Transformer-based intrusion detection
+5. Generating counterfactual explanations
+6. Quantifying predictive uncertainty
+7. Improving the transparency and trustworthiness of NIDS predictions
 
 ---
 
-# Methodology
+# Dataset
 
-The experimental workflow follows a sequential pipeline.
+## CICIDS2017
+
+The experiments use the **CICIDS2017** benchmark dataset developed by the Canadian Institute for Cybersecurity.
+
+The repository does **not** redistribute the original dataset.
+
+The model notebooks use a prepared training/testing split with:
+
+* **Training samples:** 1,948,553
+* **Testing samples:** 487,139
+* **Input features:** 40
+* **Number of classes:** 14
+
+The final model input therefore consists of **40 selected network-traffic features** plus the target label.
+
+---
+
+# Research Pipeline
 
 ```text
-CICIDS2017 Raw Dataset
-        │
-        ▼
-Data Loading
-        │
-        ▼
-Data Cleaning
-        │
-        ▼
-Feature Matrix Preparation
-        │
-        ▼
-Correlation-Based Feature Selection
-        │
-        ▼
-Random Forest Feature Selection
-        │
-        ▼
-Label Encoding
-        │
-        ▼
-Train/Test Split
-        │
-        ▼
-Feature Standardization
-        │
-        ├─────────────────────┐
-        ▼                     ▼
- Classical ML Models      Deep Learning Models
-        │                     │
-        │              ┌──────┴──────┐
-        │              ▼             ▼
-        │             MLP        Transformer
-        │
-        └──────────────┬──────────────┘
-                       ▼
-              Multiclass Prediction
-                       │
-              ┌────────┴────────┐
-              ▼                 ▼
-      DiCE Explainability   MC Dropout
-      Counterfactuals       Uncertainty
+                    CICIDS2017
+                         │
+                         ▼
+                Raw Dataset Loading
+                         │
+                         ▼
+                  Data Cleaning
+                         │
+                         ▼
+             Feature Matrix Preparation
+                         │
+                         ▼
+          Correlation-Based Feature Selection
+                         │
+                         ▼
+           Random Forest Feature Selection
+                         │
+                         ▼
+              Label Encoding
+                         │
+                         ▼
+             Train/Test Preparation
+                         │
+                         ▼
+                Standardization
+                         │
+            ┌────────────┴────────────┐
+            │                         │
+            ▼                         ▼
+    Classical ML Models        Deep Learning
+            │                         │
+     ┌──────┼──────┐             ┌────┴────┐
+     │      │      │             │         │
+     ▼      ▼      ▼             ▼         ▼
+    RF    XGBoost LightGBM      MLP    Transformer
+     │      │      │             │         │
+     └──────┴──────┴─────────────┴─────────┘
+                         │
+                         ▼
+               Multiclass Prediction
+                         │
+             ┌───────────┴───────────┐
+             │                       │
+             ▼                       ▼
+       DiCE Explainability     MC Dropout
+       Counterfactuals         Uncertainty
 ```
 
 ---
 
 # Repository Structure
 
-The repository currently contains the following main notebooks:
-
 ```text
 Trustworthy-Multiclass-Network-Intrusion-Detection-ALL-Files-with-code/
 │
 ├── Notebook 1 — Load Raw Dataset.ipynb
-│
 ├── Notebook 2_Data Cleaning.ipynb
-│
 ├── Notebook 3_Feature Matrix Preparation.ipynb
-│
 ├── Notebook 4 – Correlation-Based Feature Selection.ipynb
-│
 ├── Notebook 5 — Random Forest Feature Selection.ipynb
-│
 ├── Notebook 6 — Label Encoding, TrainTest Split & Standardization.ipynb
 │
 ├── Random forest model code.ipynb
-│
 ├── XGBoost Code.ipynb
-│
 ├── LGBMClassifier Code.ipynb
-│
 ├── MLP code.ipynb
-│
 ├── 6_Build_&_Train_Transformer.ipynb
 │
 ├── DiCE Explainability.ipynb
-│
 ├── Monte Carlo Dropout & Uncertainty Estimation.ipynb
 │
 └── README.md
 ```
 
-The repository currently contains **5 commits** and provides the complete notebook-based research workflow.
+The GitHub repository currently contains these notebooks on the `main` branch.
 
 ---
 
@@ -162,7 +143,7 @@ The repository currently contains **5 commits** and provides the complete notebo
 
 `Notebook 1 — Load Raw Dataset.ipynb`
 
-This notebook is used to load the raw CICIDS2017 network-traffic data and prepare it for subsequent processing.
+Loads the CICIDS2017 network-traffic data and prepares the raw data for subsequent processing.
 
 ---
 
@@ -172,7 +153,7 @@ This notebook is used to load the raw CICIDS2017 network-traffic data and prepar
 
 `Notebook 2_Data Cleaning.ipynb`
 
-The cleaning stage prepares the network-flow data for machine-learning experiments by handling data-quality issues and preparing the dataset for feature construction.
+Performs data-cleaning operations required before constructing the final machine-learning dataset.
 
 ---
 
@@ -182,9 +163,7 @@ The cleaning stage prepares the network-flow data for machine-learning experimen
 
 `Notebook 3_Feature Matrix Preparation.ipynb`
 
-This stage constructs the feature matrix used by the classification models.
-
-The resulting feature representation is subsequently used for feature-selection and model-training experiments.
+Constructs the feature matrix and target representation used by the downstream experiments.
 
 ---
 
@@ -194,9 +173,9 @@ The resulting feature representation is subsequently used for feature-selection 
 
 `Notebook 4 – Correlation-Based Feature Selection.ipynb`
 
-Highly correlated features can introduce redundancy into a machine-learning model.
+Correlation analysis is used to identify redundant or highly correlated features.
 
-This notebook performs correlation-based feature analysis to reduce redundant features before subsequent feature-selection steps.
+This reduces unnecessary feature duplication before the subsequent feature-selection stage.
 
 ---
 
@@ -208,7 +187,7 @@ This notebook performs correlation-based feature analysis to reduce redundant fe
 
 Random Forest feature importance is used to identify informative network-traffic features.
 
-This provides a second feature-selection stage following the correlation-based filtering process.
+The final experimental models use **40 input features**.
 
 ---
 
@@ -218,58 +197,84 @@ This provides a second feature-selection stage following the correlation-based f
 
 `Notebook 6 — Label Encoding, TrainTest Split & Standardization.ipynb`
 
-This stage prepares the final dataset for supervised learning.
-
-The workflow includes:
+This stage prepares the final learning data through:
 
 * Label encoding
-* Train/test partitioning
+* Train/test preparation
 * Feature standardization
-* Preparation of the final machine-learning inputs
+* Final feature matrix construction
+
+The model notebooks use 1,948,553 training samples and 487,139 testing samples with 40 input features.
 
 ---
 
 # Machine-Learning Models
 
-The repository implements several classification approaches for multiclass intrusion detection.
+The repository evaluates four primary non-Transformer models:
 
-## Random Forest
-
-**Notebook:**
-
-`Random forest model code.ipynb`
-
-Random Forest is used as a tree-based ensemble baseline and is also used during feature-selection experiments.
+* Random Forest
+* XGBoost
+* LightGBM
+* Multilayer Perceptron (MLP)
 
 ---
 
-## XGBoost
+# Results
 
-**Notebook:**
+The following results are taken directly from the **saved notebook outputs in this repository**.
 
-`XGBoost Code.ipynb`
+All four metrics below use the weighted multiclass evaluation reported by the respective notebooks.
 
-XGBoost is implemented as a gradient-boosted decision-tree model for multiclass network intrusion classification.
+| Model             |     Accuracy |    Precision |       Recall |     F1-Score |
+| ----------------- | -----------: | -----------: | -----------: | -----------: |
+| **XGBoost**       | **99.9062%** | **99.9238%** | **99.9062%** | **99.9124%** |
+| **LightGBM**      | **99.8828%** | **99.9089%** | **99.8828%** | **99.8925%** |
+| **Random Forest** | **99.7847%** | **99.8828%** | **99.7847%** | **99.8204%** |
+| **MLP**           | **85.0850%** | **94.8675%** | **85.0850%** | **88.5943%** |
 
----
+### XGBoost
 
-## LightGBM
+XGBoost achieved:
 
-**Notebook:**
+* Accuracy: **0.9990619**
+* Precision: **0.9992378**
+* Recall: **0.9990619**
+* F1-score: **0.9991244**
 
-`LGBMClassifier Code.ipynb`
+The classification report also reports a **macro F1-score of 0.9453**, demonstrating that the weighted metrics are substantially higher than the macro metrics because of class imbalance.
 
-LightGBM provides another gradient-boosting-based approach for evaluating multiclass intrusion detection performance.
+### LightGBM
 
----
+LightGBM achieved:
 
-## Multilayer Perceptron
+* Accuracy: **0.9988278**
+* Precision: **0.9990889**
+* Recall: **0.9988278**
+* F1-score: **0.9989247**
 
-**Notebook:**
+The notebook reports a macro F1-score of **0.9271**.
 
-`MLP code.ipynb`
+### Random Forest
 
-A Multilayer Perceptron neural network is implemented as a deep-learning baseline for network-traffic classification.
+Random Forest achieved:
+
+* Accuracy: **0.9978466**
+* Precision: **0.9988278**
+* Recall: **0.9978466**
+* F1-score: **0.9982037**
+
+The classification report reports a macro F1-score of **0.8600**.
+
+### MLP
+
+The MLP achieved:
+
+* Accuracy: **0.8508496**
+* Precision: **0.9486751**
+* Recall: **0.8508496**
+* F1-score: **0.8859432**
+
+The class-level results show substantially more variation across the 14 classes than the tree-based models.
 
 ---
 
@@ -279,85 +284,150 @@ A Multilayer Perceptron neural network is implemented as a deep-learning baselin
 
 `6_Build_&_Train_Transformer.ipynb`
 
-The repository also implements a Transformer-based model for multiclass network intrusion detection.
+A Transformer-based deep-learning architecture is also implemented for multiclass intrusion detection.
 
-The notebook contains the model-building and training workflow and is approximately **950 lines / 116 KB** in the current repository.
+The notebook trains the model with early stopping and learning-rate reduction.
 
-The Transformer approach is investigated as a deep-learning alternative to conventional tree-based classifiers and MLP models.
+The saved evaluation output reports:
+
+| Metric               |       Result |
+| -------------------- | -----------: |
+| Evaluation Accuracy  | **99.3346%** |
+| Evaluation Precision | **99.4182%** |
+| Evaluation Recall    | **99.2202%** |
+| Evaluation Loss      | **0.002138** |
+
+The best training epoch was reported as epoch 19, after which early stopping restored the best model weights.
+
+> **Important:** These values are reported as the notebook's evaluation/validation results. They should not be described as an independent held-out test result unless the experimental protocol explicitly establishes that dataset as the final test set.
 
 ---
 
-# Trustworthy AI Components
+# Model Comparison
 
-A key objective of this repository is to move beyond classification accuracy and investigate the **trustworthiness** of model predictions.
+Based on the saved weighted metrics:
 
-## Counterfactual Explainability — DiCE
+```text
+XGBoost       ████████████████████  99.91% F1
+LightGBM      ████████████████████  99.89% F1
+Random Forest ████████████████████  99.82% F1
+Transformer   ████████████████████  99.42% Precision*
+MLP           █████████████████     88.59% F1
+
+* Transformer value is the notebook's evaluation result,
+  not labelled here as an independent test-set F1.
+```
+
+Among the classical models, **XGBoost provides the highest weighted accuracy and F1-score in the currently saved notebook outputs**.
+
+---
+
+# Why Macro Metrics Matter
+
+Although the weighted scores are extremely high for the tree-based models, the macro scores are lower.
+
+For example:
+
+* XGBoost macro F1: **0.9453**
+* LightGBM macro F1: **0.9271**
+* Random Forest macro F1: **0.8600**
+
+This difference is important in cybersecurity because a model can achieve very high overall accuracy while performing less effectively on rare attack classes.
+
+Therefore, this repository reports both aggregate performance and class-level classification results rather than relying exclusively on accuracy.
+
+---
+
+# ROC Analysis
+
+The Random Forest and XGBoost notebooks also generate **per-class ROC curves** using the predicted class probabilities.
+
+The ROC analysis is implemented separately for the multiclass classes and visualizes the class-specific false-positive and true-positive rates.
+
+---
+
+# Explainable AI — DiCE
 
 **Notebook:**
 
 `DiCE Explainability.ipynb`
 
-The repository uses **DiCE (Diverse Counterfactual Explanations)** to generate counterfactual explanations for model predictions.
+The repository includes a dedicated implementation for **counterfactual explainability using DiCE**.
 
-Counterfactual explanations answer questions such as:
+Counterfactual explanations investigate how changing input network-flow features could alter the model's prediction.
 
-> What would need to change in the observed network-flow features for the model to produce a different prediction?
+Conceptually:
 
-This provides an interpretable way to investigate individual intrusion-detection decisions.
+```text
+Original Network Flow
+          │
+          ▼
+     Model Prediction
+          │
+          ▼
+   Counterfactual Search
+          │
+          ▼
+Alternative Feature Configuration
+          │
+          ▼
+     Changed Prediction
+```
 
-The current DiCE notebook contains approximately **4,817 lines / 313 KB** of notebook content.
+This provides an additional layer of interpretability beyond simply reporting the predicted attack class.
+
+The DiCE notebook is a substantial implementation containing approximately **4,817 lines** of notebook content.
 
 ---
 
-# Uncertainty Estimation
+# Predictive Uncertainty — Monte Carlo Dropout
 
 **Notebook:**
 
 `Monte Carlo Dropout & Uncertainty Estimation.ipynb`
 
-Monte Carlo Dropout is used to estimate predictive uncertainty.
+The repository also includes a dedicated Monte Carlo Dropout workflow for uncertainty analysis.
 
-Instead of considering only the final predicted class, repeated stochastic forward passes can provide information about the stability and uncertainty of model predictions.
+The notebook contains approximately **4,153 lines** of content and approximately **1.07 MB** in the current repository.
 
-This is particularly relevant for cybersecurity applications where uncertain predictions may require additional investigation rather than being treated as fully reliable automated decisions.
+Monte Carlo Dropout performs multiple stochastic predictions and can be used to estimate the uncertainty associated with model predictions.
+
+```text
+Input Network Flow
+        │
+        ▼
+ Multiple Stochastic
+    Forward Passes
+        │
+        ▼
+ Probability Estimates
+        │
+        ▼
+ Prediction + Uncertainty
+```
+
+This is particularly relevant to cybersecurity because low-confidence predictions can potentially be flagged for further investigation rather than treated as equally reliable automated decisions.
 
 ---
 
 # Reproducibility
 
-Reproducibility is an important component of this research repository.
+The experiments use fixed random seeds in the model notebooks.
 
-The notebooks are organized as a sequential experimental pipeline:
+For example, the Random Forest implementation explicitly sets:
 
-```text
-1. Load Raw Dataset
-        ↓
-2. Data Cleaning
-        ↓
-3. Feature Matrix Preparation
-        ↓
-4. Correlation-Based Feature Selection
-        ↓
-5. Random Forest Feature Selection
-        ↓
-6. Label Encoding / Train-Test Split / Standardization
-        ↓
-7. Model Training
-        ↓
-8. Explainability
-        ↓
-9. Uncertainty Estimation
+```python
+SEED = 42
+
+random.seed(SEED)
+np.random.seed(SEED)
+
+os.environ["PYTHONHASHSEED"] = str(SEED)
 ```
 
-For reproducible experiments, use the same:
+The LightGBM implementation similarly fixes the random seed to **42**.
 
-* Dataset version
-* Feature-processing procedure
-* Train/test configuration
-* Label encoding
-* Standardization procedure
-* Model configuration
-* Random seeds where specified in the notebooks
+The repository therefore aims to provide a reproducible notebook-based research workflow.
 
 ---
 
@@ -375,29 +445,21 @@ Enter the repository:
 cd Trustworthy-Multiclass-Network-Intrusion-Detection-ALL-Files-with-code
 ```
 
-Install the required Python packages:
+Install the Python libraries used by the notebooks according to the import statements and environment requirements specified within the individual notebooks.
 
-```bash
-pip install -r requirements.txt
-```
-
-Launch Jupyter Notebook:
+Launch Jupyter:
 
 ```bash
 jupyter notebook
 ```
 
-Then open the notebooks from the repository and execute them according to the workflow described above.
-
-> **Note:** Dataset paths may need to be adjusted to match the location of the CICIDS2017 files on your computer.
+> **Note:** The current GitHub repository does not contain a `requirements.txt` file. Therefore, this README intentionally does not provide a `pip install -r requirements.txt` command.
 
 ---
 
 # Recommended Execution Order
 
-For reproducing the complete workflow, execute the notebooks in the following order:
-
-### Data Preparation
+## Data Preparation
 
 1. `Notebook 1 — Load Raw Dataset.ipynb`
 2. `Notebook 2_Data Cleaning.ipynb`
@@ -406,7 +468,7 @@ For reproducing the complete workflow, execute the notebooks in the following or
 5. `Notebook 5 — Random Forest Feature Selection.ipynb`
 6. `Notebook 6 — Label Encoding, TrainTest Split & Standardization.ipynb`
 
-### Model Development
+## Model Training
 
 7. `Random forest model code.ipynb`
 8. `XGBoost Code.ipynb`
@@ -414,7 +476,7 @@ For reproducing the complete workflow, execute the notebooks in the following or
 10. `MLP code.ipynb`
 11. `6_Build_&_Train_Transformer.ipynb`
 
-### Trustworthiness Analysis
+## Trustworthy AI Analysis
 
 12. `DiCE Explainability.ipynb`
 13. `Monte Carlo Dropout & Uncertainty Estimation.ipynb`
@@ -423,9 +485,7 @@ For reproducing the complete workflow, execute the notebooks in the following or
 
 # Technologies
 
-The project is implemented primarily using the Python scientific-computing and machine-learning ecosystem.
-
-Key technologies include:
+The project uses the following technologies and libraries:
 
 * Python
 * Jupyter Notebook
@@ -441,24 +501,24 @@ Key technologies include:
 
 ---
 
-# Research Contributions
+# Key Contributions
 
-The repository brings together several components into a unified trustworthy intrusion-detection workflow:
+This repository provides an integrated experimental workflow combining:
 
-### Multiclass intrusion detection
+### Multiclass NIDS
 
-Instead of limiting the problem to benign-versus-attack classification, the project investigates multiclass network intrusion detection.
+Fourteen-class network intrusion classification using CICIDS2017.
 
-### Feature selection
+### Feature Selection
 
-Two complementary feature-selection approaches are incorporated:
+A two-stage feature-selection workflow involving:
 
 * Correlation-based feature filtering
 * Random Forest feature importance
 
-### Model comparison
+### Model Comparison
 
-The repository enables comparison among:
+Evaluation of:
 
 * Random Forest
 * XGBoost
@@ -466,55 +526,50 @@ The repository enables comparison among:
 * MLP
 * Transformer
 
-### Explainable AI
+### Explainability
 
-DiCE is incorporated to generate counterfactual explanations for individual model predictions.
+Counterfactual explanations using DiCE.
 
-### Uncertainty estimation
+### Uncertainty
 
-Monte Carlo Dropout is used to investigate predictive uncertainty and provide information beyond the predicted class label.
+Monte Carlo Dropout-based predictive uncertainty analysis.
+
+### Reproducibility
+
+Fixed random seeds and an ordered notebook workflow.
 
 ---
 
-# Important Notes
+# Important Dataset Note
 
-### Dataset availability
+The CICIDS2017 dataset is not distributed with this repository.
 
-The CICIDS2017 dataset is **not included** in this GitHub repository.
+Users should obtain the dataset from the official Canadian Institute for Cybersecurity source and configure the local paths expected by the notebooks.
 
-Please obtain the dataset from the official Canadian Institute for Cybersecurity source and follow the dataset organization expected by the notebooks.
+The current model notebooks reference prepared files such as:
 
-### Computational requirements
+```text
+../datasets/CICIDS2017/train_test/CICIDS2017_Train_80.csv
+../datasets/CICIDS2017/train_test/CICIDS2017_Test_20.csv
+```
 
-Training deep-learning models and running explainability/uncertainty experiments can require substantially more computational resources than the basic preprocessing notebooks.
-
-For large experiments, sufficient:
-
-* RAM
-* CPU/GPU resources
-* Disk space
-
-are recommended.
-
-### Notebook paths
-
-The notebooks were developed as a research workflow and may contain local dataset paths. Update those paths before execution if your dataset is stored in a different location.
+These dataset files are not stored in the GitHub repository.
 
 ---
 
 # Citation
 
-If you use this repository, methodology, or implementation in academic research, please cite the associated research work.
+If you use this repository or its implementation in academic research, please cite the associated research work.
 
 ```bibtex
 @article{shahab2026trustworthy,
   title   = {Trustworthy Multiclass Network Intrusion Detection},
-  author  = {Shahab Khan},
+  author  = {Khan, Shahab},
   year    = {2026}
 }
 ```
 
-> Replace the citation metadata above with the final published-paper bibliographic information once the associated manuscript has been formally published.
+> Update the BibTeX entry with the final journal, volume, issue, pages, DOI, and publisher information after publication.
 
 ---
 
@@ -526,16 +581,17 @@ Department of Cyber Security
 Muslim Youth University
 Islamabad, Pakistan
 
-Research interests:
+### Research Interests
 
 * Cybersecurity
 * Network Intrusion Detection
 * Explainable Artificial Intelligence
+* Trustworthy AI
 * Machine Learning
 * Deep Learning
 * Transformer Models
-* Trustworthy AI
-* Zero-Day Attack Detection
+* Cyber Attack Detection
+* Predictive Uncertainty
 
 ---
 
@@ -543,21 +599,11 @@ Research interests:
 
 This project is released under the **MIT License**.
 
-See [`LICENSE`](LICENSE) for details.
-
 ---
 
-# Acknowledgements
-
-This work uses the CICIDS2017 benchmark dataset developed by the **Canadian Institute for Cybersecurity**.
-
-The project also builds upon open-source machine-learning, deep-learning, and explainable-AI libraries.
-
----
-
-## Repository
+# Repository
 
 **GitHub:**
 https://github.com/shahabkhan9380900/Trustworthy-Multiclass-Network-Intrusion-Detection-ALL-Files-with-code
 
-If you find this repository useful, consider ⭐ starring the repository and citing the associated research work.
+If you find this repository useful, please consider giving it a ⭐ and citing the associated research work.
